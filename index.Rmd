@@ -11,4 +11,4 @@ output:
 
 ## Project thoughts
 
-I am interested in exploring data related to... population growth in relation to economic growth.
+I am interested in exploring data related to... population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country's economic output and the growth (or decline) in population. 
