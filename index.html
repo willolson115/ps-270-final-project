@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Final_proj_Data_file/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46.zip","Final_proj_Data_file/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46.csv","Final_proj_Data_file/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46/Metadata_Country_API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46.csv","Final_proj_Data_file/API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46/Metadata_Indicator_API_NY.GDP.PCAP.CD_DS2_en_csv_v2_46.csv","Final_proj_Data_file/API_SP.POP.GROW_DS2_en_csv_v2_593.zip","Final_proj_Data_file/API_SP.POP.GROW_DS2_en_csv_v2_593/API_SP.POP.GROW_DS2_en_csv_v2_593.csv","Final_proj_Data_file/API_SP.POP.GROW_DS2_en_csv_v2_593/Metadata_Country_API_SP.POP.GROW_DS2_en_csv_v2_593.csv","Final_proj_Data_file/API_SP.POP.GROW_DS2_en_csv_v2_593/Metadata_Indicator_API_SP.POP.GROW_DS2_en_csv_v2_593.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1545,8 +1545,34 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <div class="d-article">
 <h2 id="project-thoughts">Project thoughts</h2>
-<p>I am interested in exploring data related to… population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country’s economic output and the growth (or decline) in population.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Milestone 1
+I am interested in exploring data related to… population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country’s economic output and the growth (or decline) in population.</p>
+<p>Milestone 2
+Does a nation’s GDP influence its population growth?
+My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline. My plausible story is that as states develop and their GDP grows their ability to support a population through food and medicine also grows. But at a certain point once states have a large GDP their population growth declines, this can be seen in rich east Asian countries such as South Korea and Japan.
+Y= population growth (annual%)
+X= GDP per capita in USD
+A strong positive correlation in the beginning of the graph, then it begins to even out, and finally at the end of the graph it should begin to have a negative correlation. This would create an upside down U shape which explains how a population increases when GDP increases, then eventually population growth slows, and finally at high GDP population growth begins to decline. Some things that would disprove this would be any sort of linear relationship, either positive or negative.</p>
+<p>The data I have is from the World Bank, which I both manually downloaded from their website and used ‘install.packages(“WDI”)’.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/WDI/'>WDI</a></span><span class='op'>)</span></span>
+<span><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/WDI/man/WDI.html'>WDI</a></span><span class='op'>(</span></span>
+<span>  country <span class='op'>=</span> <span class='st'>"all"</span>,</span>
+<span>  indicator <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"NY.GDP.PCAP.CD"</span>, <span class='st'>"SP.POP.GROW"</span><span class='op'>)</span>,</span>
+<span>  start <span class='op'>=</span> <span class='fl'>1960</span>,</span>
+<span>  end <span class='op'>=</span> <span class='fl'>2023</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>      country iso2c iso3c year NY.GDP.PCAP.CD SP.POP.GROW
+1 Afghanistan    AF   AFG 1960             NA          NA
+2 Afghanistan    AF   AFG 1961             NA    1.962239
+3 Afghanistan    AF   AFG 1962             NA    2.044523
+4 Afghanistan    AF   AFG 1963             NA    2.105208
+5 Afghanistan    AF   AFG 1964             NA    2.161195
+6 Afghanistan    AF   AFG 1965             NA    2.233709</code></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

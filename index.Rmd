@@ -11,4 +11,26 @@ output:
 
 ## Project thoughts
 
+Milestone 1
 I am interested in exploring data related to... population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country's economic output and the growth (or decline) in population. 
+
+Milestone 2
+Does a nation’s GDP influence its population growth?
+My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline. My plausible story is that as states develop and their GDP grows their ability to support a population through food and medicine also grows. But at a certain point once states have a large GDP their population growth declines, this can be seen in rich east Asian countries such as South Korea and Japan.
+Y= population growth (annual%)
+X= GDP per capita in USD
+A strong positive correlation in the beginning of the graph, then it begins to even out, and finally at the end of the graph it should begin to have a negative correlation. This would create an upside down U shape which explains how a population increases when GDP increases, then eventually population growth slows, and finally at high GDP population growth begins to decline.  Some things that would disprove this would be any sort of linear relationship, either positive or negative. 
+
+The data I have is from the World Bank, which I both manually downloaded from their website and used 'install.packages("WDI")'.
+
+```{r}
+
+library(WDI)
+data <- WDI(
+  country = "all",
+  indicator = c("NY.GDP.PCAP.CD", "SP.POP.GROW"),
+  start = 1960,
+  end = 2023)
+head(data)
+```
+
