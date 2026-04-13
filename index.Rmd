@@ -64,3 +64,16 @@ ggplot(clean_subset_decade, aes(x = NY.GDP.PCAP.CD, y = SP.POP.GROW)) +
   theme_minimal()
 ```
 
+## Milestone 4 
+Regression model and interpretation 
+```{r}
+library(broom)
+
+fit_1 <- lm(SP.POP.GROW ~ NY.GDP.PCAP.CD, data = clean_subset_decade)
+tidy(fit_1)
+fit_1
+```
+
+The coefficient of 1.67 means that when our x value, GDP per capita is 0 the population growth rate is 1.67%. 
+The coefficient of -1.721e-05 means that for every increase in GDP per capita the population growth rate decreases by 0.00001721 percentage points which is indicated by the negative sign.
+This negative relationship suggests that as GDP increases population growth rate goes down by a very small amount. 

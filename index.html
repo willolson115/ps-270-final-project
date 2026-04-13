@@ -1602,7 +1602,35 @@ A strong positive correlation in the beginning of the graph, then it begins to e
 </div>
 <p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" alt="" width="624" /></p>
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="milestone-4">Milestone 4</h2>
+Regression model and interpretation
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>fit_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>SP.POP.GROW</span> <span class='op'>~</span> <span class='va'>NY.GDP.PCAP.CD</span>, data <span class='op'>=</span> <span class='va'>clean_subset_decade</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>fit_1</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 × 5
+  term             estimate  std.error statistic   p.value
+  &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)     1.67      0.0556         30.0  8.02e-149
+2 NY.GDP.PCAP.CD -0.0000172 0.00000272     -6.34 3.31e- 10</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>fit_1</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = SP.POP.GROW ~ NY.GDP.PCAP.CD, data = clean_subset_decade)
+
+Coefficients:
+   (Intercept)  NY.GDP.PCAP.CD  
+     1.670e+00      -1.721e-05  </code></pre>
+</div>
+<p>The coefficient of 1.67 means that when our x value, GDP per capita is 0 the population growth rate is 1.67%.
+The coefficient of -1.721e-05 means that for every increase in GDP per capita the population growth rate decreases by 0.00001721 percentage points which is indicated by the negative sign.
+This negative relationship suggests that as GDP increases population growth rate goes down by a very small amount.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
