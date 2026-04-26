@@ -1544,9 +1544,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="project-thoughts">Project thoughts</h2>
-<h2 id="milestone-1">Milestone 1</h2>
-<p>I am interested in exploring data related to… population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country’s economic output and the growth (or decline) in population.</p>
+<h2 id="relationship-between-gdp-per-capita-and-population-growth-over-time">Relationship Between GDP Per Capita And Population Growth Over Time</h2>
+<h2 id="introduction">Introduction</h2>
+<p><strong>Does a nation’s GDP influence its population growth?</strong>
+<strong>My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline.</strong>
+This research is important for two reasons in particular. <strong>The first</strong> is it can serve as an important method of predicting what will happen to populations in developing nations as their economies develop and GDP per capita increases. This allows observes to predict either an increase or decrease in population. This is essential to helping developing nations because an rapid increase in population can lead to resource shortages such as housing, energy, or food, they lack of any of those could lead to humanitarian concerns. Inversely the decrease in a population could lead to the rapid disruption of an economy due to a shrunken workforce.</p>
+<p><strong>The second</strong> reason this research is important is because it can influence domestic politics by serving as an important reason for pro immigration view points, especially in wealthy-developed nations. If this research shows that high GDP results in a low or evening negative population growth then one very simple solution developed nations could use to increase their population decline is through pro-immigration policies.</p>
 <h2 id="milestone-2">Milestone 2</h2>
 <p>Does a nation’s GDP influence its population growth?
 My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline. My plausible story is that as states develop and their GDP grows their ability to support a population through food and medicine also grows. But at a certain point once states have a large GDP their population growth declines, this can be seen in rich east Asian countries such as South Korea and Japan.
@@ -1573,7 +1576,11 @@ A strong positive correlation in the beginning of the graph, then it begins to e
 5 Afghanistan    AF   AFG 1984             NA   2.4629117
 6 Afghanistan    AF   AFG 1985             NA   2.0925752</code></pre>
 </div>
-<h2 id="milestone-3">Milestone 3</h2>
+<h2 id="data-section">Data Section</h2>
+<p>x= GDP per capita in USD</p>
+<p>y= population growth (annual%)</p>
+<p>The dependent or outcome variable in this analysis is population growth measured as the annual percentage growth rate (SP.POP.GROW) from the World Bank. The independent or predictor variable is GDP per capita which is measured in USD (NY.GDP.PCAP.CD) also from the World Bank. This project uses cross-sectional data comparing countries based on their average values over multiple decades.</p>
+<p>What would support my hypothesis is a strong positive correlation in the beginning of the graph, then it begins to even out, and finally at the end of the graph it should begin to have a negative correlation. This would create an upside down U shape which explains how a population increases when GDP increases, then eventually population growth slows, and finally at high GDP population growth begins to decline. Some things that would disprove this would be any sort of linear relationship, either positive or negative.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>clean_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>|&gt;</span> </span>
@@ -1609,28 +1616,40 @@ Regression model and interpretation
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>fit_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>SP.POP.GROW</span> <span class='op'>~</span> <span class='va'>NY.GDP.PCAP.CD</span>, data <span class='op'>=</span> <span class='va'>clean_subset_decade</span><span class='op'>)</span></span>
-<span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>fit_1</span><span class='op'>)</span></span></code></pre>
+<span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>fit_1</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 2 × 5
-  term             estimate  std.error statistic   p.value
-  &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept)     1.67      0.0556         30.0  8.02e-149
-2 NY.GDP.PCAP.CD -0.0000172 0.00000272     -6.34 3.31e- 10</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>fit_1</span></span></code></pre>
-</div>
-<pre><code>
-Call:
-lm(formula = SP.POP.GROW ~ NY.GDP.PCAP.CD, data = clean_subset_decade)
-
-Coefficients:
-   (Intercept)  NY.GDP.PCAP.CD  
-     1.670e+00      -1.721e-05  </code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">1.6698532</td>
+<td style="text-align: right;">0.0555781</td>
+<td style="text-align: right;">30.045139</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NY.GDP.PCAP.CD</td>
+<td style="text-align: right;">-0.0000172</td>
+<td style="text-align: right;">0.0000027</td>
+<td style="text-align: right;">-6.335939</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p>The coefficient of 1.67 means that when our x value, GDP per capita is 0 the population growth rate is 1.67%.
 The coefficient of -1.721e-05 means that for every increase in GDP per capita the population growth rate decreases by 0.00001721 percentage points which is indicated by the negative sign.
 This negative relationship suggests that as GDP increases population growth rate goes down by a very small amount.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

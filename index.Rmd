@@ -9,10 +9,14 @@ output:
 
 
 
-## Project thoughts
+## Relationship Between GDP Per Capita And Population Growth Over Time
 
-## Milestone 1
-I am interested in exploring data related to... population growth in relation to economic growth. I am curious to see if there is a correlation between an increase in a country's economic output and the growth (or decline) in population. 
+## Introduction
+**Does a nation’s GDP influence its population growth?** 
+**My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline.** 
+This research is important for two reasons in particular. **The first** is it can serve as an important method of predicting what will happen to populations in developing nations as their economies develop and GDP per capita increases. This allows observes to predict either an increase or decrease in population. This is essential to helping developing nations because an rapid increase in population can lead to resource shortages such as housing, energy, or food, they lack of any of those could lead to humanitarian concerns. Inversely the decrease in a population could lead to the rapid disruption of an economy due to a shrunken workforce. 
+
+**The second** reason this research is important is because it can influence domestic politics by serving as an important reason for pro immigration view points, especially in wealthy-developed nations. If this research shows that high GDP results in a low or evening negative population growth then one very simple solution developed nations could use to increase their population decline is through pro-immigration policies.   
 
 ## Milestone 2
 Does a nation’s GDP influence its population growth?
@@ -35,7 +39,15 @@ head(data)
 ```
 
 
-## Milestone 3
+## Data Section
+
+x= GDP per capita in USD
+
+y= population growth (annual%)
+
+The dependent or outcome variable in this analysis is population growth measured as the annual percentage growth rate (SP.POP.GROW) from the World Bank. The independent or predictor variable is GDP per capita which is measured in  USD (NY.GDP.PCAP.CD) also from the World Bank. This project uses cross-sectional data comparing countries based on their average values over multiple decades. 
+
+What would support my hypothesis is a strong positive correlation in the beginning of the graph, then it begins to even out, and finally at the end of the graph it should begin to have a negative correlation. This would create an upside down U shape which explains how a population increases when GDP increases, then eventually population growth slows, and finally at high GDP population growth begins to decline.  Some things that would disprove this would be any sort of linear relationship, either positive or negative. 
 
 ```{r}
 clean_data <- data |> 
@@ -70,8 +82,7 @@ Regression model and interpretation
 library(broom)
 
 fit_1 <- lm(SP.POP.GROW ~ NY.GDP.PCAP.CD, data = clean_subset_decade)
-tidy(fit_1)
-fit_1
+tidy(fit_1) |> knitr::kable()
 ```
 
 The coefficient of 1.67 means that when our x value, GDP per capita is 0 the population growth rate is 1.67%. 
