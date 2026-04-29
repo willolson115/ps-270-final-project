@@ -1,7 +1,7 @@
 ---
-title: "PS270 Final Project"
+title: "GDP And Population"
 author: "Will Olson"
-description: "My final project"
+description: "PS 270 Final Project"
 output:
   distill::distill_article:
     self_contained: false
@@ -9,27 +9,15 @@ output:
 
 
 
-## Relationship Between GDP Per Capita And Population Growth Over Time
+## Relationship Between GDP Per Capita And Population Growth
 
 ## Introduction
 **Does a nation’s GDP influence its population growth?** 
 **My hypothesis is that in a state as GDP increases population growth will also increase, to a certain point at which the growth will slow and eventually decline.** 
-This research is important for two reasons in particular. **The first** is it can serve as an important method of predicting what will happen to populations in developing nations as their economies develop and GDP per capita increases. This allows observes to predict either an increase or decrease in population. This is essential to helping developing nations because an rapid increase in population can lead to resource shortages such as housing, energy, or food, they lack of any of those could lead to humanitarian concerns. Inversely the decrease in a population could lead to the rapid disruption of an economy due to a shrunken workforce. 
+This research is important for two reasons in particular. **The first** is it can serve as an important method of predicting what will happen to populations in developing nations as their economies develop and GDP per capita increases. This allows observers to predict either an increase or decrease in population. This is essential to helping developing nations because an rapid increase in population can lead to resource shortages such as housing, energy, or food. The lack of any of those could lead to humanitarian concerns. Inversely the decrease in a population could lead to the rapid disruption of an economy due to a shrunken workforce. 
 
-**The second** reason this research is important is because it can influence domestic politics by serving as an important reason for pro immigration view points, especially in wealthy-developed nations. If this research shows that high GDP results in a low or evening negative population growth then one very simple solution developed nations could use to increase their population decline is through pro-immigration policies.   
+**The second** reason this research is important is because it can influence domestic politics by serving as an important reason for pro immigration view points, especially in wealthy-developed nations. If this research shows that high GDP results in a low or evening negative population growth then one very simple solution developed nations could use to solve their population decline is through pro immigration policies.   
 
-
-
-```{r}
-library(tidyverse)
-library(WDI)
-data <- WDI(
-  country = "all",
-  indicator = c("NY.GDP.PCAP.CD", "SP.POP.GROW"),
-  start = 1980,
-  end = 2020)
-head(data)
-```
 
 
 ## Data Section
@@ -44,28 +32,50 @@ What would support my hypothesis is a strong positive correlation in the beginni
 
 I will also test my hypothesis using a regression analysis of population growth on GDP per capita. The null hypothesis is that GDP per capita has no relationship with population growth. If the estimated coefficient is statistically significant at p < 0.05 we can reject the null hypothesis and conclude that there is evidence of a relationship between GDP per capita and population growth. If the coefficient is not statistically significant or the relationship appears linear the hypothesis will not be supported.
 
-```{r}
+```{r,echo=FALSE}
+library(tidyverse)
+library(WDI)
+data <- WDI(
+  country = "all",
+  indicator = c("NY.GDP.PCAP.CD", "SP.POP.GROW"),
+  start = 1980,
+  end = 2020)
+
+```
+```{r,echo=FALSE}
 clean_data <- data |> 
   select(country, year, NY.GDP.PCAP.CD, SP.POP.GROW) |>
   drop_na() 
+```
 
+**Plot Visualizing Main Outcome Variable Of Interest**
+
+```{r,echo=FALSE}
+one_var_plot <- ggplot(filter(clean_data, year == 2000), aes(x = SP.POP.GROW)) +
+  geom_histogram() +
+  labs(
+    x = "Population Growth Rate (annual %)",
+    y = "Number of Countries",
+    title = "Distribution of Population Growth Rates (2000)",
+    caption = "Source: World Bank"
+  ) +
+  theme_minimal()
+one_var_plot
 ```
 
 
-```{r}
-clean_subset_decade <- clean_data |>
-  filter(year %in% c(1980, 1990, 2000, 2010, 2020))
+**Plot Of Main Relationship Of Interest**
 
-ggplot(clean_subset_decade, aes(x = NY.GDP.PCAP.CD, y = SP.POP.GROW)) +
+```{r, echo=FALSE}
+
+ggplot(clean_data, aes(x = NY.GDP.PCAP.CD, y = SP.POP.GROW)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", se = FALSE) +
   scale_x_log10(labels = scales::label_comma()) +
-  facet_wrap(~year) +
   labs(
     x = "GDP per capita (USD, log scale)",
     y = "Population growth (annual %)",
-    title = "GDP per Capita vs Population Growth Over Time",
-    subtitle = "Selected years: 1980–2020",
+    title = "GDP per Capita vs Population Growth",
     caption = "Source: World Bank"
   ) +
   theme_minimal()
@@ -73,32 +83,68 @@ ggplot(clean_subset_decade, aes(x = NY.GDP.PCAP.CD, y = SP.POP.GROW)) +
 
 ## Result Section 
 
-**Main plot results**
+**Main relationship plot results**
 
-The plots do not provide strong support for the hypothesis's prediction of an inverted U shaped relationship between GDP per capita and population growth. Across most years, the relationship appears relatively weak and generally negative rather than showing the clear rise and fall predicted by the hypothesis. While the 1990 plot shows a slight curvature that loosely resembles an inverted U-shape, this pattern is not consistent across other years. In contrast, the 2000 plot shows a fairly linear negative relationship and the 2010 and 2020 plots display only small changes from negative to positive with no clear nonlinear pattern. Overall, the visual evidence suggests that higher GDP per capita is generally associated with lower population growth but does not support a strong nonlinear relationship across income levels.
+The plot provides limited support for the hypothesis predicting an upside down U shaped relationship between GDP per capita and population growth. Instead of a clear rise and  decline the overall pattern appears relatively weak and slightly negative across most income levels. The smoothed trend line shows only a small curve, with a small dip in population growth at middle income levels followed by a slight increase at higher levels, but this pattern is not large. Since the line is horizontal it indicates that there is a much smaller effect between GDP per capita and population growth than my hypothesis predicted. Overall, the visual evidence indicates that higher GDP per capita is generally associated with lower population growth, but does not provide strong support for a consistent nonlinear or an upside down U shaped relationship.
 
-```{r}
+```{r, echo=FALSE}
 library(broom)
 
-fit_1 <- lm(SP.POP.GROW ~ NY.GDP.PCAP.CD, data = clean_subset_decade)
-tidy(fit_1) |> knitr::kable()
+clean_data <- clean_data |>
+  mutate(gdp_10k = NY.GDP.PCAP.CD / 10000)
+
+fit_1 <- lm(SP.POP.GROW ~ gdp_10k, data = clean_data)
+
+tidy(fit_1) |>
+  mutate(term = case_when(
+    term == "(Intercept)" ~ "Intercept",
+    term == "gdp_10k" ~ "GDP per capita (USD)"
+  )) |>
+  knitr::kable(col.names = c("Variable", "Estimate", "Std. Error", "T Value", "P Value"), digits = 3)
 ```
 
 **Regression results**
 
-The coefficient of about 1.67 means that when our x value, GDP per capita is 0 the population growth rate is 1.67%. This has no practical significance because GDP cannot be 0. The coefficient of -1.721e-05 means that for every increase in GDP per capita, or one USD, the population growth rate decreases by 0.00001721 percentage points. This negative relationship suggests that as GDP increases population growth rate decreases by a very small amount. This trend suggests that nations with higher GDP have declining population growth rate, although by a very small amount. 
+The coefficient of about 1.71 means that when our x value, GDP per capita is 0 the population growth rate is 1.71%. This has no practical significance because GDP cannot be 0. The coefficient of -0.127 means that for every increase of 10,000 USD in GDP per capita, the population growth rate decreases by 0.127 percentage points. This negative relationship suggests that as GDP increases population growth rate decreases by a small amount. This trend suggests that nations with higher GDP have declining population growth rate, although by a very small amount. 
 
 **Statistical Significance** 
 
-The coefficient of interest, -0.0000172, is statistically significant. This is shown by the p-value which is in the same chart as the regression. The p-value is so small that the code automatically rounds it to 0, so even though the chart displays a p-value of 0 that is not entirely true, it is just **really* close to it. At a 95% Confidence Interval our Alpha is 0.05, and since our p-value of 0 is less than that we can reject the null hypothesis. And, because our p-value is so small we can also confidently say that the observed negative relationship is unlikely due to chance. 
+The coefficient of interest, -0.127, is statistically significant. This is shown by the p-value which is in the same chart as the regression. The p-value is so small that the code automatically rounds it to 0, so even though the chart displays a p-value of 0 that is not entirely true, it is just **really* close to it. At a 95% Confidence Interval our Alpha is 0.05, and since our p-value of 0 is less than that we can reject the null hypothesis. And, because our p-value is so small we can also confidently say that the observed negative relationship is unlikely due to chance. Furthermore, the standard error for GDP per capita is 0.009 which is small compared to the coefficient of -0.127. This shows a high level of precision in the estimate and is why the p value is so small.
 
 **Substantive Meaning And Causality**
 
-Substantively the results show that nations with a high GDP per capita tend to have lower or even decreasing birth rates. This aligns with broader demographic patterns, where wealthier nations often experience lower birth rates due to factors like higher levels of education, greater access to healthcare, and increased urbanization or industrialization. However this relationship should not be interpreted as causal. Because the analysis is based on cross-sectional data, it does not account for other variables such as confounders that may influence both GDP per capita and population growth. One such confounder could be industrialization, more industrialized nation's have a higher GDP because of the increased productivity and the demand for skilled labor which would pay higher. And industrialized economies require less manpower due to reliance on automation, so a smaller workforce demand could lead to a smaller population growth.The observed relationship may be driven by confounders rather than a direct causal effect of GDP on population growth.
+Substantively the results show that nations with a high GDP per capita tend to have lower or even decreasing birth rates. This aligns with broader demographic patterns, where wealthier nations often experience lower birth rates due to factors like higher levels of education, greater access to healthcare, and increased urbanization or industrialization. However this relationship should not be interpreted as causal. Because the analysis is based on cross-sectional data, it does not account for other variables such as confounders that may influence both GDP per capita and population growth. One such confounder could be industrialization, more industrialized nation's have a higher GDP because of the increased productivity and the demand for skilled labor which would pay higher. And industrialized economies require less manpower due to reliance on automation, so a smaller workforce demand could lead to a smaller population growth. The observed relationship may be driven by confounders rather than a direct causal effect of GDP on population growth.
 
 ## Conclusion Section
 
 The results provide partial support for my hypothesis. The regression analysis indicates a statistically significant negative relationship between GDP per capita and population growth, suggesting that nations with higher GDP per capita tend to have lower population growth rates. However there is no clear evidence of the upside down U shape relationship in the plots. The plots do not show a consistent pattern in which population growth initially increases with GDP per capita and then declines at higher income levels. Instead, the relationship appears generally negative or weak across most decades. An important limitation of the analysis would be since it is a cross-sectional design there is a strong concern that confounders, such as industrialization, could be what influences both GDP per capita and population growth. It also prevents this analysis from claiming this is a causal relationship. Another limitation highlighted in feedback received from Milestone 4 is that the relationship between my dependent and independent variables could be a case of reverse causation, in other words population growth would **cause** changes in GDP per capita. 
 
-If I had more resources I would improve this analysis by going even further back in time. I would really want to see how periods like the industrial revolution in Europe and North America would display the relationship between GDP per capita and population growth. The limitation was that the World Bank didn't have data that far back and the further back in time you go the less accurate the population and economic data. 
+This analysis could be improved if I had more time. I would specifically test confounders such as industrialization, types of economies, and time to see if any of those would have similar or possibly greater effects on population growth compared to GDP per capita. 
+
+## Extra Credit Attempt
+
+**Regression Using Log**
+
+```{r, echo=FALSE}
+clean_data <- clean_data |>
+  mutate(log_gdp = log(NY.GDP.PCAP.CD))
+
+fit_log <- lm(SP.POP.GROW ~ log_gdp, data = clean_data)
+
+tidy(fit_log) |>
+  mutate(term = case_when(
+    term == "(Intercept)" ~ "Intercept",
+    term == "log_gdp" ~ "Log GDP per capita")) |>
+  knitr::kable(col.names = c("Variable", "Estimate", "Std. Error", "T Value", "P Value"),digits = 3)
+```
+
+After some brief research and discussion with my colleagues I decided to test how using a non-linear regression would alter my outcome. This made sense because my original main relationship plot showed GDP per capita with a log and both population and GDP per capita grow exponentially. Using log in the regression means that for one unit increase in Log GDP per capita the population growth rate decreases by 0.314. This is shows how higher GDP per capita can quickly lead to decreasing population growth. This data shows that there is evidence of a non-linear relationship which helps partially prove my hypothesis. 
+
+## AI Disclaimer
+
+I used chat gpt to help me create a model summary table but I couldn't understand what some of the variables displayed were so I stuck with the knitr::kable version I am more used to. I also used it to help figure out how to incorporate logs into my regression and how to properly understand what logs are and what they do/represent in a regression. 
+
+```{r print-code, ref.label=knitr::all_labels(), echo = TRUE, eval=FALSE}
+
+```
 
