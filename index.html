@@ -1553,14 +1553,25 @@ This research is important for two reasons in particular. <strong>The first</str
 <h2 id="data-section">Data Section</h2>
 <p>x= GDP per capita in USD</p>
 <p>y= population growth (annual%)</p>
-<p>The dependent or outcome variable in this analysis is population growth measured as the annual percentage growth rate (SP.POP.GROW) from the World Bank. The independent or predictor variable is GDP per capita which is measured in USD (NY.GDP.PCAP.CD) also from the World Bank. This project uses cross-sectional data comparing countries based on their average values over multiple decades.</p>
+<p>The dependent or outcome variable in this analysis is population growth measured as the annual percentage growth rate (SP.POP.GROW) from the World Bank. I made a histogram to show what the world’s population growth looked like in the year 2000, it shows most countries over 0% increase with a few under. The mean is about is about 1.4% annual increase. The independent or predictor variable is GDP per capita which is measured in USD (NY.GDP.PCAP.CD) also from the World Bank. This project uses cross-sectional data comparing countries based on their average values over multiple decades.</p>
 <p>What would support my hypothesis is a strong positive correlation in the beginning of the graph, then it begins to even out, and finally at the end of the graph it should begin to have a negative correlation. This would create an upside down U shape which explains how a population increases when GDP increases, then eventually population growth slows, and finally at high GDP population growth begins to decline. Some things that would disprove this would be any sort of linear relationship, either positive or negative.</p>
 <p>I will also test my hypothesis using a regression analysis of population growth on GDP per capita. The null hypothesis is that GDP per capita has no relationship with population growth. If the estimated coefficient is statistically significant at p &lt; 0.05 we can reject the null hypothesis and conclude that there is evidence of a relationship between GDP per capita and population growth. If the coefficient is not statistically significant or the relationship appears linear the hypothesis will not be supported.</p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
 <div class="layout-chunk" data-layout="l-body">
-
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Mean of Population Growth (2000)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.392</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p><strong>Plot Visualizing Main Outcome Variable Of Interest</strong></p>
 <div class="layout-chunk" data-layout="l-body">
@@ -1658,6 +1669,12 @@ This research is important for two reasons in particular. <strong>The first</str
 <span><span class='va'>clean_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>|&gt;</span> </span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>country</span>, <span class='va'>year</span>, <span class='va'>NY.GDP.PCAP.CD</span>, <span class='va'>SP.POP.GROW</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span> </span>
+<span></span>
+<span><span class='va'>clean_data_mean_grow</span> <span class='op'>&lt;-</span> <span class='va'>clean_data</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>year</span> <span class='op'>==</span> <span class='fl'>2000</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>`Mean of Population Growth (2000)` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>SP.POP.GROW</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>clean_data_mean_grow</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span>digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
 <span><span class='va'>one_var_plot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>clean_data</span>, <span class='va'>year</span> <span class='op'>==</span> <span class='fl'>2000</span><span class='op'>)</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>SP.POP.GROW</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span></span>
